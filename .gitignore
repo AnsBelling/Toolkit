@@ -1,0 +1,5 @@
+/bin/*
+*/bin/*
+/bin/data/
+/*!/bin/data/
+serialModifiedExample/bin/*
