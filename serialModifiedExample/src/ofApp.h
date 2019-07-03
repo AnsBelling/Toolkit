@@ -28,7 +28,7 @@ public:
     string sensorValue;
     int byteData;
 	int pingSensorValue;
-	int capSense;
+	int capSenseSensorValue;
     string msg;
 };
 
