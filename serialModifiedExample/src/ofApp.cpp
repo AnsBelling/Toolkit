@@ -41,20 +41,30 @@ void ofApp::update() {
 		while (serial.available() > 0) {
 			// byte data is being writen into byteData as int.
 			byteData = serial.readByte();
+			// cout << byteData << endl;  // This prints the values correctly with ASCII '32' in between values which is the space delimiter
+
+			if (byteData == OF_SERIAL_NO_DATA || byteData == OF_SERIAL_ERROR || byteData == 0) break;
 			// checks whether a new line symbol (\n) was received from Arduino.
 			if (byteData == '/n') {
 				// now splitting the received string str using the ofSplitString() function 
 				// and use the resulting array of strings list to set values to two sensor variables
 				vector<string> list = ofSplitString(str, " "); // splits the string str to its parts using space as a delimiter
 				if (list.size() > 2) { // checks that there are at least two strings in the resulted array list
-					pingSensorValue = ofToInt(list[0]); // convert strings of list to int values and set them to the sensor variables
-					capSenseSensorValue = ofToInt(list[1]);
+					pingSensorValue = ofToFloat(list[0]); // convert strings of list to int values and set them to the sensor variables
+					capSenseSensorValue = ofToFloat(list[1]);
+
+					//cout << ofToString(list[0]); 
 				}
 				str = "";
+
+
+				//cout << ofToString(list[0]);
 			}
 			else str.push_back(byteData);
 
-			cout << pingSensorValue; // output: currently only 0's
+		    // cout << capSenseSensorValue << endl; // output: currently 0's
+
+			//cout << pingSensorValue<< endl; // output: currently only 0's
 
 			//byteData is converted into a string for drawing later.
 			//sensorValue = "value: " + ofToString(byteData);

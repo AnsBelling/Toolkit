@@ -32,15 +32,15 @@ void loop()
 {
    //  setting ping distance in cm to dist variable 
   dist = sonar.ping_cm();
-  int total1 =  cs_4_2.capacitiveSensor(30);
+  long total1 =  cs_4_2.capacitiveSensor(30);
 
   delay(100);
   
                       
- Serial.print(dist);  
+ Serial.write(dist);  
  Serial.print(" ");
- Serial.println(total1);
- // Serial.print("/n");
+ Serial.write(total1);
+ //Serial.print(" ");
    
 
    

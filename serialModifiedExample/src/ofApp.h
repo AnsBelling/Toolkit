@@ -26,9 +26,9 @@ public:
 	string str;
     ofSerial	serial;
     string sensorValue;
-    int byteData;
-	int pingSensorValue;
-	int capSenseSensorValue;
+    float byteData;
+	float pingSensorValue;
+	float capSenseSensorValue;
     string msg;
 };
 
