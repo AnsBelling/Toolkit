@@ -85,7 +85,7 @@ void ofApp::update() {
 		if (pingSensorValue<=200) {
 			iSeeYouFunc();
 		}
-		if (capSenseSensorValue >= 80) iFeelYouFunc();
+		if (capSenseSensorValue >= 675) iFeelYouFunc();
 
 		
 	
@@ -113,7 +113,7 @@ void ofApp::ambientMood() {
 void ofApp::iFeelYouFunc()
 {
 	cout << capSenseSensorValue << endl;
-	if (capSenseSensorValue >=80) {
+	if (capSenseSensorValue >=675) {
 		float timer2 = ofGetElapsedTimeMillis();
 		if (iFeelYou.isPlaying()==false && iSeeYou.isPlaying() == false) iFeelYou.play();
 
