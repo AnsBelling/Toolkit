@@ -11,7 +11,7 @@
 void ofApp::setup() {
 	ofSetVerticalSync(true);
 
-	ofBackground(0, 0, 0);
+	//ofBackground(0, 0, 0);
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	font.load("monospace", 24);
@@ -21,7 +21,10 @@ void ofApp::setup() {
 	iFeelYou.setVolume(0.75f);
 	iFeelYou.setMultiPlay(true);
 	iSeeYou.setVolume(0.75f);
-	iSeeYou.setMultiPlay(false);
+	iSeeYou.setMultiPlay(true);
+
+	startTime = ofGetElapsedTimeMillis();
+	timerEnd = false;
 
 	serial.listDevices();
 	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
@@ -44,7 +47,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-
+	//////SERIAL COMMUNICATION/////////////////////////////////////////////////////////////////////////////////////////////////////////7
 	// Simple if statement to inform user if Arduino is sending serial messages.
 	if (serial.available() < 0) {
 		sensorValue = "Arduino Error";
@@ -73,18 +76,45 @@ void ofApp::update() {
 			}
 			else str.push_back(byteData);
 		}
-		if (capSenseSensorValue < 300 && pingSensorValue>150) {
-			ambientMood();
+
+
+		//////STATES//////////////////////////////////////////////////////////////////////////////////////////////
+		while (pingSensorValue <= 200 && pingSensorValue >= 50) {
+			float timer = ofGetElapsedTimeMillis();
+		
+				iSeeYou.play();
+			
+			if (timer>=2000) {
+				float currentTime = ofGetElapsedTimeMillis();
+				iSeeYou.stop();
+				
+				cout << currentTime << endl;
+				if (currentTime >= 8000) { 
+					ofResetElapsedTimeCounter();
+					float timer = ofGetElapsedTimeMillis();
+				}
+			}
+			if (pingSensorValue > 201) break;
 		}
-		if (capSenseSensorValue >= 300  ) {
+		
+		/*
+		else if (pingSensorValue > 190) {
+			iSeeYou.stop();
+		}
+
+		if (capSenseSensorValue >= 135) {
 			iFeelYouFunc();
-
+			
 		}
-		if (pingSensorValue <= 250) {
-			iSeeYouFunc();
+		else if (capSenseSensorValue < 135) {
+			iFeelYou.stop();
 		}
-
-		    //cout << capSenseSensorValue << endl; // output: currently 0's
+		
+		
+		else if (capSenseSensorValue < 60 && pingSensorValue>150) {
+			ambientMood();
+		}*/
+		   // cout << capSenseSensorValue << endl; // output: currently 0's
 
 			cout << pingSensorValue<< endl; // output: currently only 0's
 

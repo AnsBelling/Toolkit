@@ -23,6 +23,9 @@ public:
 	string str;
     ofSerial	serial;
 	
+	float startTime;
+	bool timerEnd;
+
 	ofSoundPlayer iFeelYou;
 	ofSoundPlayer iSeeYou;
 
