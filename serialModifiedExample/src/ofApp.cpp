@@ -16,6 +16,13 @@ void ofApp::setup() {
 
 	font.load("monospace", 24);
 
+	iFeelYou.load("iFeelYou.mp3");
+	iSeeYou.load("iSeeYou.mp3");
+	iFeelYou.setVolume(0.75f);
+	iFeelYou.setMultiPlay(true);
+	iSeeYou.setVolume(0.75f);
+	iSeeYou.setMultiPlay(false);
+
 	serial.listDevices();
 	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
 	//serial2.listDevices();
@@ -67,13 +74,17 @@ void ofApp::update() {
 			else str.push_back(byteData);
 		}
 
+		if (capSenseSensorValue >= 300  ) {
+			iFeelYouFunc();
+		}
+		if (pingSensorValue <= 250) {
+			iSeeYouFunc();
+		}
 
-		    cout << capSenseSensorValue << endl; // output: currently 0's
+		    //cout << capSenseSensorValue << endl; // output: currently 0's
 
-//			cout << pingSensorValue<< endl; // output: currently only 0's
+			cout << pingSensorValue<< endl; // output: currently only 0's
 
-			// byteData is converted into a string for drawing later.
-			// sensorValue = "value: " + ofToString(byteData);
 		}
 	}
 
@@ -84,61 +95,17 @@ void ofApp::draw() {
 	// msg = "press key a, b or c to test serial:\n";
     //  font.drawString(msg, 50, 60);
     // font.drawString("sensorValue: " + sensorValue, 50, 100);
-
 }
 
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key) {
-
+void ofApp::iFeelYouFunc()
+{
+	iFeelYou.play();
 }
 
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key) {
+void ofApp::iSeeYouFunc()
+{
+	iSeeYou.play();
 
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
