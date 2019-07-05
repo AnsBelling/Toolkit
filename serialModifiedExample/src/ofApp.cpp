@@ -24,7 +24,7 @@ void ofApp::setup() {
 	iSeeYou.setMultiPlay(true);
 
 	startTime = ofGetElapsedTimeMillis();
-	timerEnd = false;
+
 
 	serial.listDevices();
 	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
@@ -47,6 +47,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+	ofSoundUpdate();
 	//////SERIAL COMMUNICATION/////////////////////////////////////////////////////////////////////////////////////////////////////////7
 	// Simple if statement to inform user if Arduino is sending serial messages.
 	if (serial.available() < 0) {
@@ -54,74 +55,44 @@ void ofApp::update() {
 	}
 	else {
 		// While statement looping through serial messages when serial is being provided.
-		while (serial.available() > 0 ) {
+		while (serial.available() > 0) {
 			// byte data is being writen into byteData as int.
 			byteData = serial.readByte();
-	
+
 			// cout << byteData << endl;  // This prints the values correctly with ASCII '32' in between values which is the space delimiter
 
 			if (byteData == OF_SERIAL_NO_DATA || byteData == OF_SERIAL_ERROR || byteData == 0) break;
-			
+
 			// checks whether a new line symbol (\n) was received from Arduino.
 			if (byteData == '\n') {
 				// now splitting the received string str using the ofSplitString() function 
 				// and use the resulting array of strings list to set values to two sensor variables
 				vector<string> list = ofSplitString(str, " ");
-				if ( list.size() >= 2 ) {
-					pingSensorValue = ofToFloat( list[0] );
-					capSenseSensorValue = ofToInt( list[1] );
+				if (list.size() >= 2) {
+					pingSensorValue = ofToFloat(list[0]);
+					capSenseSensorValue = ofToInt(list[1]);
 				}
 
 				str = "";
 			}
 			else str.push_back(byteData);
 		}
-
+		//cout << capSenseSensorValue << endl;
+		//cout << pingSensorValue << endl;
 
 		//////STATES//////////////////////////////////////////////////////////////////////////////////////////////
-		while (pingSensorValue <= 200 && pingSensorValue >= 50) {
-			float timer = ofGetElapsedTimeMillis();
 		
-				iSeeYou.play();
-			
-			if (timer>=2000) {
-				float currentTime = ofGetElapsedTimeMillis();
-				iSeeYou.stop();
-				
-				cout << currentTime << endl;
-				if (currentTime >= 8000) { 
-					ofResetElapsedTimeCounter();
-					float timer = ofGetElapsedTimeMillis();
-				}
-			}
-			if (pingSensorValue > 201) break;
+		if (pingSensorValue<=200) {
+			iSeeYouFunc();
 		}
-		
-		/*
-		else if (pingSensorValue > 190) {
-			iSeeYou.stop();
-		}
+		if (capSenseSensorValue >= 80) iFeelYouFunc();
 
-		if (capSenseSensorValue >= 135) {
-			iFeelYouFunc();
-			
-		}
-		else if (capSenseSensorValue < 135) {
-			iFeelYou.stop();
-		}
 		
-		
-		else if (capSenseSensorValue < 60 && pingSensorValue>150) {
-			ambientMood();
-		}*/
-		   // cout << capSenseSensorValue << endl; // output: currently 0's
+	
 
-			cout << pingSensorValue<< endl; // output: currently only 0's
 
-		}
 	}
-
-
+}
 //--------------------------------------------------------------
 void ofApp::draw() {
 	// ofSetColor(0);
@@ -141,12 +112,45 @@ void ofApp::ambientMood() {
 
 void ofApp::iFeelYouFunc()
 {
-	iFeelYou.play();
+	cout << capSenseSensorValue << endl;
+	if (capSenseSensorValue >=80) {
+		float timer2 = ofGetElapsedTimeMillis();
+		if (iFeelYou.isPlaying()==false && iSeeYou.isPlaying() == false) iFeelYou.play();
+
+		if (timer2 >= 1500) {
+			float currentTime2 = ofGetElapsedTimeMillis();
+			iFeelYou.stop();
+
+			// cout << currentTime2 << endl;
+			if (currentTime2 >= 8000) {
+				ofResetElapsedTimeCounter();
+				float timer2 = ofGetElapsedTimeMillis();
+			}
+		}
+		//if (capSenseSensorValue < 40) break;
+
+	}
 }
 
 void ofApp::iSeeYouFunc()
 {
-	iSeeYou.play();
+	if (pingSensorValue <= 200 && pingSensorValue >= 50) {
+		float timer = ofGetElapsedTimeMillis();
+		if (iSeeYou.isPlaying()==false && iFeelYou.isPlaying()==false)	iSeeYou.play();
+
+		if (timer >= 2000) {
+			float currentTime = ofGetElapsedTimeMillis();
+			iSeeYou.stop();
+
+			// cout << currentTime << endl;
+			if (currentTime >= 5000) {
+				ofResetElapsedTimeCounter();
+				float timer = ofGetElapsedTimeMillis();
+			}
+		}
+		//if (pingSensorValue >= 201) break;
+	}
+
 
 
 }
