@@ -22,13 +22,14 @@ public:
     void gotMessage(ofMessage msg);
     
     ofTrueTypeFont		font;
-       
+     
 	string str;
     ofSerial	serial;
+	//ofSerial serial2;
     string sensorValue;
-    float byteData;
-	float pingSensorValue;
-	float capSenseSensorValue;
+    int byteData;
+	int pingSensorValue;
+	unsigned long capSenseSensorValue;
     string msg;
 };
 

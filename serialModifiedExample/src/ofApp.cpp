@@ -18,13 +18,19 @@ void ofApp::setup() {
 
 	serial.listDevices();
 	vector <ofSerialDeviceInfo> deviceList = serial.getDeviceList();
+	//serial2.listDevices();
+	//vector <ofSerialDeviceInfo> deviceList2 = serial2.getDeviceList();
+
 
 	// this should be set to whatever com port your serial device is connected to.
 	// (ie, COM4 on a pc, /dev/tty.... on linux, /dev/tty... on a mac)
 	// arduino users check in arduino app....
 	int baud = 9600;
+
+	//int baud2 = 115700;
 	//serial.setup(0, baud); //open the first device
 	serial.setup("COM3", baud); // windows example
+	//serial2.setup("COM4", baud2);
 	//serial.setup("tty.usbserial-A9007QuL", baud); // mac osx example
 	//serial.setup("/dev/ttyUSB0", baud); //linux example
 }
@@ -38,39 +44,39 @@ void ofApp::update() {
 	}
 	else {
 		// While statement looping through serial messages when serial is being provided.
-		while (serial.available() > 0) {
+		while (serial.available() > 0 ) {
 			// byte data is being writen into byteData as int.
 			byteData = serial.readByte();
+	
 			// cout << byteData << endl;  // This prints the values correctly with ASCII '32' in between values which is the space delimiter
 
 			if (byteData == OF_SERIAL_NO_DATA || byteData == OF_SERIAL_ERROR || byteData == 0) break;
+			
 			// checks whether a new line symbol (\n) was received from Arduino.
-			if (byteData == '/n') {
+			if (byteData == '\n') {
 				// now splitting the received string str using the ofSplitString() function 
 				// and use the resulting array of strings list to set values to two sensor variables
-				vector<string> list = ofSplitString(str, " "); // splits the string str to its parts using space as a delimiter
-				if (list.size() > 2) { // checks that there are at least two strings in the resulted array list
-					pingSensorValue = ofToFloat(list[0]); // convert strings of list to int values and set them to the sensor variables
-					capSenseSensorValue = ofToFloat(list[1]);
-
-					//cout << ofToString(list[0]); 
+				vector<string> list = ofSplitString(str, " ");
+				if ( list.size() >= 2 ) {
+					pingSensorValue = ofToFloat( list[0] );
+					capSenseSensorValue = ofToInt( list[1] );
 				}
+
 				str = "";
-
-
-				//cout << ofToString(list[0]);
 			}
 			else str.push_back(byteData);
+		}
 
-		    // cout << capSenseSensorValue << endl; // output: currently 0's
 
-			//cout << pingSensorValue<< endl; // output: currently only 0's
+		    cout << capSenseSensorValue << endl; // output: currently 0's
 
-			//byteData is converted into a string for drawing later.
-			//sensorValue = "value: " + ofToString(byteData);
+//			cout << pingSensorValue<< endl; // output: currently only 0's
+
+			// byteData is converted into a string for drawing later.
+			// sensorValue = "value: " + ofToString(byteData);
 		}
 	}
-}
+
 
 //--------------------------------------------------------------
 void ofApp::draw() {
