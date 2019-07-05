@@ -9,6 +9,8 @@ public:
     void setup();
     void update();
     void draw();
+
+	void ambientMood();
    
 	void iFeelYouFunc();
 	void iSeeYouFunc();

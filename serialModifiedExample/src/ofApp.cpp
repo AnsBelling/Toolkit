@@ -11,7 +11,7 @@
 void ofApp::setup() {
 	ofSetVerticalSync(true);
 
-	ofBackground(255);
+	ofBackground(0, 0, 0);
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	font.load("monospace", 24);
@@ -73,9 +73,12 @@ void ofApp::update() {
 			}
 			else str.push_back(byteData);
 		}
-
+		if (capSenseSensorValue < 300 && pingSensorValue>150) {
+			ambientMood();
+		}
 		if (capSenseSensorValue >= 300  ) {
 			iFeelYouFunc();
+
 		}
 		if (pingSensorValue <= 250) {
 			iSeeYouFunc();
@@ -95,6 +98,15 @@ void ofApp::draw() {
 	// msg = "press key a, b or c to test serial:\n";
     //  font.drawString(msg, 50, 60);
     // font.drawString("sensorValue: " + sensorValue, 50, 100);
+}
+void ofApp::ambientMood() {
+
+	float time = ofGetElapsedTimef(); //Get time in seconds
+	//Get periodic value in [-1,1], with wavelength equal to 1 second
+	float value = sin(time * M_TWO_PI / 4);
+	//Map value from [-1,1] to [0,255]
+	float v = ofMap(value, -1, 1, 0, 255);
+	ofBackground(0, v, 0);
 }
 
 void ofApp::iFeelYouFunc()
