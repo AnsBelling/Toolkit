@@ -11,7 +11,6 @@
 void ofApp::setup() {
 	ofSetVerticalSync(true);
 
-	//ofBackground(0, 0, 0);
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	font.load("monospace", 24);
@@ -77,81 +76,138 @@ void ofApp::update() {
 			}
 			else str.push_back(byteData);
 		}
-		//cout << capSenseSensorValue << endl;
+		cout << capSenseSensorValue << endl;
 		//cout << pingSensorValue << endl;
 
+
 		//////STATES//////////////////////////////////////////////////////////////////////////////////////////////
+
 		
-		if (pingSensorValue<=200) {
-			iSeeYouFunc();
+		if (pingSensorValue <= 150 && pingSensorValue >= 50) {
+				iSeeYouFunc();
+		
 		}
-		if (capSenseSensorValue >= 675) iFeelYouFunc();
 
-		
-	
+		if (capSenseSensorValue >= 1200) {
+				iFeelYouFunc();
+				
+				//serial.flush();
 
+		}
+
+		serial.flush();
 
 	}
 }
+
 //--------------------------------------------------------------
 void ofApp::draw() {
-	// ofSetColor(0);
-	// msg = "press key a, b or c to test serial:\n";
-    //  font.drawString(msg, 50, 60);
-    // font.drawString("sensorValue: " + sensorValue, 50, 100);
+	if (pingSensorValue >= 220) {
+		float time = ofGetElapsedTimef(); //Get time in seconds
+			//Get periodic value in [-1,1], with wavelength equal to 1 second
+		float value = sin(time * M_TWO_PI / 6);
+		//Map value from [-1,1] to [0,255]
+		float v = ofMap(value, -1, 1, 0, 255);
+		ofBackground(0, v, 0);
+	}
+
+	if (pingSensorValue <=200) {
+		float time = ofGetElapsedTimef(); //Get time in seconds
+		//Get periodic value in [-1,1], with wavelength equal to 1 second
+		float value = sin(time * M_TWO_PI / 2);
+		//Map value from [-1,1] to [0,255]
+		float v = ofMap(value, -1, 1, 0, 255);
+		ofBackground(0, 0, v);
+	}
+
 }
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
+	if (key == '97') {
+		ambient == true;
+		cout << key << endl;
+	}
+	if (key == 'b') {
+		timid == true;
+	}
+
+
+}
+
+
 void ofApp::ambientMood() {
 
-	float time = ofGetElapsedTimef(); //Get time in seconds
+}
+
+void ofApp::timidMood() {
+
+	float time2 = ofGetElapsedTimef(); //Get time in seconds
 	//Get periodic value in [-1,1], with wavelength equal to 1 second
-	float value = sin(time * M_TWO_PI / 4);
+	float value = sin(time2 * M_TWO_PI / 4);
+	//Map value from [-1,1] to [0,255]
+	float v = ofMap(value, -1, 1, 0, 255);
+	ofBackground(0, v, v);
+}
+
+void ofApp::trustingMood() {
+
+	float time3 = ofGetElapsedTimef(); //Get time in seconds
+	//Get periodic value in [-1,1], with wavelength equal to 1 second
+	float value = sin(time3 * M_TWO_PI / 4);
 	//Map value from [-1,1] to [0,255]
 	float v = ofMap(value, -1, 1, 0, 255);
 	ofBackground(0, v, 0);
 }
+void ofApp::scaredMood() {
 
+	float time4 = ofGetElapsedTimef(); //Get time in seconds
+	//Get periodic value in [-1,1], with wavelength equal to 1 second
+	float value = sin(time4 * M_TWO_PI / 4);
+	//Map value from [-1,1] to [0,255]
+	float v = ofMap(value, -1, 1, 0, 255);
+	ofBackground(0, v, 0);
+}
 void ofApp::iFeelYouFunc()
 {
-	cout << capSenseSensorValue << endl;
-	if (capSenseSensorValue >=675) {
+	//cout << capSenseSensorValue << endl;
+	
 		float timer2 = ofGetElapsedTimeMillis();
-		if (iFeelYou.isPlaying()==false && iSeeYou.isPlaying() == false) iFeelYou.play();
+		if (iFeelYou.isPlaying()==false ) iFeelYou.play(); //&& iSeeYou.isPlaying() == false
 
 		if (timer2 >= 1500) {
 			float currentTime2 = ofGetElapsedTimeMillis();
 			iFeelYou.stop();
 
 			// cout << currentTime2 << endl;
-			if (currentTime2 >= 8000) {
+			if (currentTime2 >= 10000) {
 				ofResetElapsedTimeCounter();
 				float timer2 = ofGetElapsedTimeMillis();
 			}
 		}
 		//if (capSenseSensorValue < 40) break;
 
-	}
 }
 
 void ofApp::iSeeYouFunc()
 {
-	if (pingSensorValue <= 200 && pingSensorValue >= 50) {
+	
 		float timer = ofGetElapsedTimeMillis();
-		if (iSeeYou.isPlaying()==false && iFeelYou.isPlaying()==false)	iSeeYou.play();
+		if (iSeeYou.isPlaying() == false) {
+			iSeeYou.play(); //&& iFeelYou.isPlaying() == false
 
-		if (timer >= 2000) {
-			float currentTime = ofGetElapsedTimeMillis();
-			iSeeYou.stop();
+			if (timer >= 2000) {
+				float currentTime = ofGetElapsedTimeMillis();
+				iSeeYou.stop();
 
-			// cout << currentTime << endl;
-			if (currentTime >= 5000) {
-				ofResetElapsedTimeCounter();
-				float timer = ofGetElapsedTimeMillis();
+				// cout << currentTime << endl;
+				if (currentTime >= 8000) {
+					ofResetElapsedTimeCounter();
+					float timer = ofGetElapsedTimeMillis();
+				}
 			}
 		}
 		//if (pingSensorValue >= 201) break;
-	}
-
-
+	
 
 }
 

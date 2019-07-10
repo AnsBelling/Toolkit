@@ -9,9 +9,19 @@ public:
     void setup();
     void update();
     void draw();
-
+	//--------------------------------------------------------------
+	void ofApp::keyPressed(int key);
+	bool ambient;
+	bool timid;
+	
 	void ambientMood();
    
+	void timidMood();
+
+	void trustingMood();
+
+	void scaredMood();
+
 	void iFeelYouFunc();
 	void iSeeYouFunc();
 

@@ -34,7 +34,7 @@ void loop()
   dist = sonar.ping_cm();
   int total1 =  cs_4_2.capacitiveSensor(30);
 
-  delay(100);
+  delay(300);
   
                       
  Serial.print(dist);  
