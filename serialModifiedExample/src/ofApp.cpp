@@ -76,8 +76,9 @@ void ofApp::update() {
 			}
 			else str.push_back(byteData);
 		}
-		cout << capSenseSensorValue << endl;
-		//cout << pingSensorValue << endl;
+		
+		//cout << capSenseSensorValue << endl;
+		cout << pingSensorValue << endl;
 
 
 		//////STATES//////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,14 +96,14 @@ void ofApp::update() {
 
 		}
 
-		serial.flush();
+		//serial.flush();
 
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	if (pingSensorValue >= 220) {
+	if (pingSensorValue >= 101) {
 		float time = ofGetElapsedTimef(); //Get time in seconds
 			//Get periodic value in [-1,1], with wavelength equal to 1 second
 		float value = sin(time * M_TWO_PI / 6);
@@ -111,7 +112,7 @@ void ofApp::draw() {
 		ofBackground(0, v, 0);
 	}
 
-	if (pingSensorValue <=200) {
+	if (pingSensorValue <=100) {
 		float time = ofGetElapsedTimef(); //Get time in seconds
 		//Get periodic value in [-1,1], with wavelength equal to 1 second
 		float value = sin(time * M_TWO_PI / 2);
